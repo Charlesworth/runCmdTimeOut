@@ -8,20 +8,6 @@ import (
 	"time"
 )
 
-func test() {
-	fmt.Println("passing cmd")
-	out, timeOut, err := RunCmdTimeOut(*exec.Command("echo", "test!"), time.Second)
-	fmt.Println("out: [", out, "] timeOut: [", timeOut, "] error: [", err, "]")
-
-	fmt.Println("failing cmd")
-	out, timeOut, err = RunCmdTimeOut(*exec.Command("shit", "test!"), time.Second)
-	fmt.Println("out: [", out, "] timeOut: [", timeOut, "] error: [", err, "]")
-
-	fmt.Println("timeout")
-	out, timeOut, err = RunCmdTimeOut(*exec.Command("sleep", "5"), time.Second)
-	fmt.Println("out: [", out, "] timeOut: [", timeOut, "] error: [", err, "]")
-}
-
 //RunCmdTimeOut takes a exec.Cmd argument and a timeOut, runs that command and returns stdOut, stdErr and a bool to indicate a time out
 func RunCmdTimeOut(cmd exec.Cmd, timeOut time.Duration) (stdOut string, timedOut bool, stdErr error) {
 	done := make(chan bool, 1)

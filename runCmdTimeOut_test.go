@@ -11,21 +11,24 @@ func TestRunCmdTimeOut(t *testing.T) {
 	cmdFail := *exec.Command("failing", "cmd")
 	cmdTimeOut := *exec.Command("sleep", "2")
 
-	stdOut, timeOut, stdErr := RunCmdTimeOut(cmdPass, time.Second)
-	if timeOut || stdErr != nil || stdOut == "" {
-		t.Error("fail")
-		//fmt.Println("out: [", out, "] timeOut: [", timeOut, "] error: [", err, "]")
+	_, timeOut, stdErr := RunCmdTimeOut(cmdPass, time.Second)
+	if timeOut {
+		t.Error("cmdPass has timed out")
+	}
+	if stdErr != nil {
+		t.Error("cmdPass returned with a stdErr")
 	}
 
-	stdOut, timeOut, stdErr = RunCmdTimeOut(cmdFail, time.Second)
-	if timeOut || stdErr == nil {
-		t.Error("fail")
-		//fmt.Println("out: [", out, "] timeOut: [", timeOut, "] error: [", err, "]")
+	_, timeOut, stdErr = RunCmdTimeOut(cmdFail, time.Second)
+	if timeOut {
+		t.Error("cmdFail timed out")
+	}
+	if stdErr == nil {
+		t.Error("cmdFail did not return a stdErr")
 	}
 
-	stdOut, timeOut, stdErr = RunCmdTimeOut(cmdTimeOut, time.Second)
-	if !timeOut || stdErr == nil {
-		t.Error("fail")
-		//fmt.Println("out: [", out, "] timeOut: [", timeOut, "] error: [", err, "]")
+	_, timeOut, stdErr = RunCmdTimeOut(cmdTimeOut, time.Millisecond)
+	if !timeOut {
+		t.Error("cmdTimeOut did not return with timeOut == true")
 	}
 }
